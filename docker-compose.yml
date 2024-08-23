@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  mongodb:
+    build: mongodb/
+    image: mern_mongo:1.0
+    container_name: mern_mongo
+    volumes:
+      - ./mongodb/data:/data/db
+    networks:
+      - web_network
+    restart: always
+  nodejs:
+    depends_on:
+      - mongodb
+    build: nodejs/
+    image: mern_nodejs:1.0
+    container_name: mern_nodejs
+    volumes:
+      - /usr/app/node_modules
+      - ./nodejs:/usr/app
+    ports:
+      - 3333:3000
+    environment:
+      - DATABASE_USER=admin
+      - DATABASE_PASSWORD=1234
+      - DATABASE_HOST=mongodb
+    networks:
+      - web_network
+    restart: always
+  reactjs:
+    depends_on:
+      - mongodb
+    build: frontend/
+    image: mern_reactjs:1.0
+    container_name: mern_reactjs
+    volumes:
+      - /usr/app/node_modules
+      - ./frontend:/usr/app
+    networks:
+      - web_network
+    restart: always
+    ports:
+      - 8181:80
+
+networks:
+  web_network:
+    name: mernstack
+    driver: bridge          
