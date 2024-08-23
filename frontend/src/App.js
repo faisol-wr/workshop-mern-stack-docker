@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const baseURL = "http://localhost:3003/api/products";
+const baseURL = "http://localhost:3333/api/products";
 
 function App() {
   const [products, setProducts] = useState(null);
